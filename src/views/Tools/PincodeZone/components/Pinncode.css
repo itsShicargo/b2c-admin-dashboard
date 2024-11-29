@@ -1,0 +1,17 @@
+
+.next-btn{
+    height: 2rem !important;
+    padding-bottom: .5rem;
+    padding-top: .3rem !important;
+}
+
+.table-container {
+    margin-left: 0; /* Adjust margin as needed */
+    padding-left: 0; /* Adjust padding as needed */
+}
+
+/* Alternatively, you can target the table directly */
+.table {
+    margin-left: 0; /* Adjust margin as needed */
+    padding-left: 0; /* Adjust padding as needed */
+}
