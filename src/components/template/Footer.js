@@ -3,31 +3,32 @@ import classNames from 'classnames'
 import { Container } from 'components/shared'
 import { APP_NAME } from 'constants/app.constant'
 import { PAGE_CONTAINER_GUTTER_X } from 'constants/theme.constant'
+import { Link } from 'react-router-dom'
 
 const FooterContent = () => {
     return (
         <div className="flex items-center justify-between flex-auto w-full">
             <span>
                 Copyright &copy; {`${new Date().getFullYear()}`} 
-                <span className="font-semibold"> {`${ APP_NAME}`}</span>  All
+                <span className="font-semibold"> {`${APP_NAME}`}</span> All
                 rights reserved.
             </span>
             <div className="">
-                <a
+                <Link
                     className="text-gray"
-                    href="/#"
-                    onClick={(e) => e.preventDefault()}
+                    to="https://shipcluescargo.com/termsandcondition.html"
+                    target="_blank" 
                 >
-                    Term & Conditions
-                </a>
+                    Terms & Conditions
+                </Link>
                 <span className="mx-2 text-muted"> | </span>
-                <a
+                <Link
                     className="text-gray"
-                    href="/#"
-                    onClick={(e) => e.preventDefault()}
+                    to="https://shipcluescargo.com/privacy.html"
+                    target="_blank" 
                 >
                     Privacy & Policy
-                </a>
+                </Link>
             </div>
         </div>
     )

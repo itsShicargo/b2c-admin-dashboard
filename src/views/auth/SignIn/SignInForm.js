@@ -2,14 +2,11 @@ import React from 'react';
 import {
     Input,
     Button,
-    Checkbox,
     FormItem,
     FormContainer,
     Alert,
-    Notification,
-    toast, // Assuming Notification is imported from components/ui
 } from 'components/ui';
-import { PasswordInput, ActionLink } from 'components/shared';
+import { PasswordInput } from 'components/shared';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import useAuth from 'utils/hooks/useAuth';
@@ -17,17 +14,9 @@ import useAuth from 'utils/hooks/useAuth';
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Please enter your username'),
     password: Yup.string().required('Please enter your password'),
-    rememberMe: Yup.bool(),
 });
 
-const SignInForm = (props) => {
-    const {
-        disableSubmit = false,
-        className,
-        forgotPasswordUrl = '/forgot-password',
-        signUpUrl = '/sign-up',
-    } = props;
-
+const SignInForm = () => {
     const { signIn } = useAuth();
     const [message, setMessage] = React.useState('');
 
@@ -37,37 +26,22 @@ const SignInForm = (props) => {
 
         try {
             const result = await signIn({ username, password });
-            console.log('Sign in result:', result);
-
-            if (result && result.status === 'failed') {
-                if (result.error === 'invalid_username' || result.error === 'invalid_password') {
-                    setMessage('These credentials do not match our records.');
-                } else {
-                    setMessage(result.message || 'Sign in failed.');
-                }
-            } else if (result && result.status === 'success') {
-              
-                if (typeof toast === 'function') {
-                    toast.push(
-                        <Notification closable type="success" duration={2000}>
-                            Login Successful
-                        </Notification>
-                    );
-                }
-            } else {
-                console.error('Unexpected result structure:', result);
-                setMessage('An unexpected error occurred. Please try again.');
+            if (result?.status === 'failed') {
+                setMessage('These credentials do not match our records.');
+            } else if (result?.status === 'success') {
+                setMessage('');
+                // Redirect or perform additional actions here
             }
         } catch (error) {
-            console.error('Sign in error:', error);
-            setMessage('An error occurred during sign in. Please try again.');
+            console.error('Sign-in error:', error);
+            setMessage('An unexpected error occurred. Please try again.');
         } finally {
             setSubmitting(false);
         }
     };
 
     return (
-        <div className={className}>
+        <div className="w-full">
             {message && (
                 <Alert className="mb-4" type="danger" showIcon>
                     {message}
@@ -77,31 +51,24 @@ const SignInForm = (props) => {
                 initialValues={{
                     username: '',
                     password: '',
-                    rememberMe: true,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values, { setSubmitting }) => {
-                    if (!disableSubmit) {
-                        onSignIn(values, setSubmitting);
-                    } else {
-                        setSubmitting(false);
-                    }
-                }}
+                onSubmit={(values, { setSubmitting }) => onSignIn(values, setSubmitting)}
             >
                 {({ touched, errors, isSubmitting }) => (
                     <Form>
                         <FormContainer>
                             <FormItem
-                                label="User Name"
+                                label="Email ID"
                                 invalid={errors.username && touched.username}
                                 errorMessage={touched.username && errors.username}
                             >
                                 <Field
                                     type="text"
-                                    autoComplete="off"
                                     name="username"
-                                    placeholder="Enter your User Name"
+                                    placeholder="Enter your Email ID"
                                     component={Input}
+                                    className="w-full"
                                 />
                             </FormItem>
                             <FormItem
@@ -110,36 +77,21 @@ const SignInForm = (props) => {
                                 errorMessage={touched.password && errors.password}
                             >
                                 <Field
-                                    autoComplete="off"
                                     name="password"
-                                    placeholder="Enter Password"
+                                    placeholder="Enter your Password"
                                     component={PasswordInput}
+                                    className="w-full"
                                 />
                             </FormItem>
-                            <div className="flex justify-between mb-6">
-                                <Field
-                                    className="mb-0"
-                                    name="rememberMe"
-                                    component={Checkbox}
-                                    children="Remember Me"
-                                />
-                                <ActionLink to={forgotPasswordUrl}>
-                                    Forgot Password?
-                                </ActionLink>
-                            </div>
-                            
                             <Button
                                 block
                                 loading={isSubmitting}
                                 variant="solid"
                                 type="submit"
+                                className="mt-4 bg-gray-600 hover:bg-gray-700"
                             >
-                                {isSubmitting ? 'Signing in...' : 'Sign In'}
+                                {isSubmitting ? 'Signing in...' : 'Login'}
                             </Button>
-                            <div className="mt-4 text-center">
-                                <span>Don't have an account yet? </span>
-                                <ActionLink to={signUpUrl}>Sign up</ActionLink>
-                            </div>
                         </FormContainer>
                     </Form>
                 )}

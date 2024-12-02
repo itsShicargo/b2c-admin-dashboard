@@ -1,18 +1,9 @@
 import React from 'react'
-import reducer from './store'
-import { injectReducer } from 'store/index'
-import Wallet from './components/Wallet'
-import TransactionHistory from './components/TransactionHistory'
 
-injectReducer('cryptoWallets', reducer)
-
-const Wallets = () => {
-    return (
-        <div className="flex flex-col gap-4">
-            <Wallet />
-            <TransactionHistory />
-        </div>
-    )
+const index = () => {
+  return (
+    <div>indexssss</div>
+  )
 }
 
-export default Wallets
+export default index

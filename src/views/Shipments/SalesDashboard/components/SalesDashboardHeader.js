@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const SalesDashboardHeader = () => {
   const [users, setUsers] = useState([
@@ -271,9 +272,11 @@ const SalesDashboardHeader = () => {
                     <button className="px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition mr-2">
                       Add User
                     </button>
+                    <Link to={'https://dashboard.shipcluescargo.com/sign-in'} >
                     <button className="px-3 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
                       Login
                     </button>
+                    </Link>
                   </td>
                 </tr>
               ))

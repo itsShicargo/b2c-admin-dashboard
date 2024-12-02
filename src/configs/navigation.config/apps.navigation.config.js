@@ -17,10 +17,10 @@ const appsNavigationConfig = [
         authority: [ADMIN, USER],
         subMenu: [
             {
-                key: 'allusers',
+                key: 'All Users',
                 path: `${APP_PREFIX_PATH}/sales/dashboard`,
                 title: 'All Users',
-                translateKey: 'allusers',
+                translateKey: 'All Users',
                 icon: 'sales',
                 type: NAV_ITEM_TYPE_ITEM,
                 authority: [USER],
@@ -32,7 +32,7 @@ const appsNavigationConfig = [
             // werehouse navigation start here ...
             {
                 key: 'searchrecords',
-                path: `${APP_PREFIX_PATH}/werehouse/werehouse`,
+                path: `${APP_PREFIX_PATH}/single-search-record`,
                 title: 'Search Records',
                 translateKey: '',
                 icon: 'apps',
