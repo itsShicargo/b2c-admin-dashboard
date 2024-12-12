@@ -2,7 +2,7 @@ import ApiService from './ApiService'
 
 export async function apiGetSalesDashboardData(data) {
     return ApiService.fetchData({
-        url: '/sales/dashboard',
+        url: '/dashboard',
         method: 'post',
         data,
     })

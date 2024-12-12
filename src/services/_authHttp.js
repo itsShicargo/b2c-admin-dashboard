@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
             refreshTokenRequest = null;
 
             if (newAccessToken) {
-                localStorage.setItem('access-token', newAccessToken);
+                localStorage.setItem('token', newAccessToken);
                 axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
                 originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
                 return axiosInstance(originalRequest);
@@ -48,12 +48,12 @@ axiosInstance.interceptors.response.use(
 const refreshToken = async () => {
     try {
         const refreshToken = localStorage.getItem('refresh-token');
-        const response = await axiosInstance.post('https://api.shipcluescargo.com/auth/refresh', { token: refreshToken });
+        const response = await axiosInstance.post('https://shipclues.com/api/employee/login', { token: refreshToken });
         localStorage.removeItem('refresh-token');
         localStorage.setItem('refresh-token', response.data.refresh);
         return response.data.access;
     } catch (error) {
-        localStorage.removeItem('access-token');
+        localStorage.removeItem('token');
         localStorage.removeItem('refresh-token');
         window.location.href = '/login';
         return null;

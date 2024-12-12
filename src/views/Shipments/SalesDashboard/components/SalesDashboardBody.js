@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Loading } from 'components/shared'
-import Statistic from './Statistic'
+// import Statistic from './Statistic'
 import SalesReport from './SalesReport'
 import SalesByCategories from './SalesByCategories'
 // import LatestOrder from './LatestOrder'
@@ -12,7 +12,7 @@ const SalesDashboardBody = () => {
     const dispatch = useDispatch()
 
     const {
-        statisticData,
+        // statisticData,
         salesReportData,
         // topProductsData,
         // latestOrderData,
@@ -31,7 +31,7 @@ const SalesDashboardBody = () => {
 
     return (
         <Loading loading={loading}>
-            <Statistic data={statisticData} />
+            {/* <Statistic data={statisticData} /> */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <SalesReport data={salesReportData} className="col-span-2" />
                 <SalesByCategories data={salesByCategoriesData} />

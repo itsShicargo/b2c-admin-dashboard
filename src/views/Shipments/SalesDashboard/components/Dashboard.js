@@ -1,62 +1,206 @@
-import DemoBoxContent from 'components/docs/DemoBoxContent'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { Bar } from 'react-chartjs-2'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js'
+import 'tailwindcss/tailwind.css'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
-const Dashboard = () => {
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
+// Create an Axios instance with default headers
+const axiosInstance = axios.create({
+    baseURL: 'https://shipclues.com/api/',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+})
+
+const Dashboard = (props) => {
+    const [fromDate, setFromDate] = useState('')
+    const [toDate, setToDate] = useState('')
+    const [dashboardData, setDashboardData] = useState(null)
+    const [loading, setLoading] = useState(false)
+
+    // Manually retrieve token from localStorage
+    const token = localStorage.getItem('token')
+
+    useEffect(() => {
+        if (!token) {
+            console.warn('Token is not available.')
+        }
+    }, [token])
+
+    const fetchDashboardData = async () => {
+        if (!token) {
+            console.error('No token found.')
+            alert('Please log in.')
+            return
+        }
+
+        setLoading(true)
+
+        try {
+            // Send the token in the request body
+            const response = await axiosInstance.post('employee/dashboard', {
+                start_date: fromDate,
+                end_date: toDate,
+                token: token,
+            })
+
+            setDashboardData(response.data.data)
+        } catch (error) {
+            console.error(
+                'Error fetching data:',
+                error.response || error.message
+            )
+            alert('Failed to fetch data. Please try again.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleRefresh = () => {
+        if (!fromDate || !toDate) {
+            alert('Please select both start and end dates.')
+            return
+        }
+
+        fetchDashboardData()
+    }
+
+    // Bar chart data and options
+    const chartData = {
+        labels: ['Today'],
+        datasets: [
+            {
+                label: 'Orders',
+                data: dashboardData ? [dashboardData.todays_order] : [0, 0],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderWidth: 2,
+            },
+        ],
+    }
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            tooltip: {
+                callbacks: {
+                    label: (tooltipItem) => {
+                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`
+                    },
+                },
+            },
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1000,
+                },
+            },
+        },
+    }
 
     return (
-        <>
-          
-
-            <div className="grid grid-rows-3 grid-flow-col gap-4">
-                <DemoBoxContent className="row-span-3 bg-transparent shadow-md  border-t-4 border-indigo-500 p-4 rounded-lg">
-                    <div>
-                        <p className="text-[#6b7280] pb-2">Shipments</p>
+        <div className="p-6 min-h-screen animate-fade-in">
+            {/* Header Section */}
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+                <h1 className="text-2xl font-bold">Dashboard</h1>
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <label htmlFor="from-date" className="text-gray-700">
+                            From:
+                        </label>
+                        <input
+                            id="from-date"
+                            type="date"
+                            value={fromDate}
+                            onChange={(e) => setFromDate(e.target.value)}
+                            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-50 transition duration-300 ease-in-out cursor-pointer"
+                        />
                     </div>
-
-                    <div className="mt-2 md:grid md:grid-cols-3 md:gap-2">
-                        <p className=" text-green-500  font-medium text-xl">
-                            0
-                        </p>
-                        <p className="border-l-2 border-green-500 text-green-500  font-medium text-xl">
-                            0
-                        </p>
-                        <p className="border-l-2 border-green-500 text-green-500  font-medium text-xl">
-                            0
-                        </p>
-                        <p className="text-[#6b7280] font-normal ">Manifested</p>
-                        <p className="text-[#6b7280] font-normal">In Transit</p>
-                        <p className="text-[#6b7280] font-normal">Delivered</p>
+                    <div className="flex items-center gap-2">
+                        <label htmlFor="to-date" className="text-gray-700">
+                            To:
+                        </label>
+                        <input
+                            id="to-date"
+                            type="date"
+                            value={toDate}
+                            onChange={(e) => setToDate(e.target.value)}
+                            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:ring-blue-200 hover:bg-blue-50 transition duration-300 ease-in-out cursor-pointer"
+                        />
                     </div>
-                </DemoBoxContent>{' '}
-                <DemoBoxContent className="row-span-3 bg-transparent shadow-md  border-t-4 border-indigo-500 p-4 rounded-lg ">
-                    <div>
-                        <p className="text-[#6b7280] pb-2">NDR Shipments</p>
-                    </div>
-
-                    <div className="mt-2 md:grid md:grid-cols-3 md:gap-2 ">
-                        <p className="text-green-500  font-medium text-xl">0</p>
-                        <p className="text-green-500 border-l-2 border-green-500 font-medium text-xl">0</p>
-                        <p className="text-green-500 border-l-2 border-green-500 font-medium text-xl ">0</p>
-                        <p className="text-[#6b7280] font-normal">Missing Appointment</p>
-                        <p className="text-[#6b7280] font-normal">Missing Contact Details</p>
-                        <p className="text-[#6b7280] font-normal">RTO/ Reattempt</p>
-                    </div>
-                </DemoBoxContent>
-                <DemoBoxContent className="row-span-3 bg-transparent shadow-md  border-t-4 border-indigo-500 p-4 rounded-lg ">
-                    <div>
-                        <p className="text-[#6b7280] pb-2">Wallet Summary</p>
-                    </div>
-
-                    <div className="mt-2 ">
-                        <p className="text-[#6b7280] font-normal pb-4">
-                            Wallet Balance
-                        </p>
-                        <p className="text-green-500 text-xl">₹0</p>
-                    </div>
-                </DemoBoxContent>
+                    <button
+                        onClick={handleRefresh}
+                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+                        disabled={loading}
+                    >
+                        {loading ? 'Loading...' : 'Submit'}
+                    </button>
+                </div>
             </div>
-        </>
+
+            {/* Counter Boxes */}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {[
+                    {
+                        title: 'Total Orders',
+                        value: dashboardData?.total_order,
+                    },
+                    {
+                        title: 'Shipped Orders',
+                        value: dashboardData?.total_shipped_order,
+                    },
+                    {
+                        title: 'Cancelled Orders',
+                        value: dashboardData?.total_cancelled_order,
+                    },
+                ].map((item, index) => (
+                    <div
+                        key={index}
+                        className="bg-white text-gray-800 p-4 rounded-md flex flex-col items-center justify-center shadow-md transform hover:scale-105 transition duration-300 ease-in-out"
+                    >
+                        <div className="mb-4 bg-blue-100 text-blue-600 p-4 rounded-full shadow-inner flex items-center justify-center text-4xl">
+                            🛒
+                        </div>
+                        <div className="text-center">
+                            <h2 className="text-lg font-bold">{item.title}</h2>
+                            <p className="text-2xl">
+                                {item.value !== undefined ? (
+                                    item.value
+                                ) : (
+                                    <Skeleton width={100} />
+                                )}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Bar Chart Section */}
+            <div className="bg-white p-6 rounded-md shadow-md animate-slide-in">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-bold">Seller Orders</h2>
+                </div>
+                <Bar data={chartData} options={chartOptions} />
+            </div>
+        </div>
     )
 }
 

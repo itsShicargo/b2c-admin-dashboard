@@ -30,7 +30,7 @@ const SignInForm = () => {
                 setMessage('These credentials do not match our records.');
             } else if (result?.status === 'success') {
                 setMessage('');
-                // Redirect or perform additional actions here
+               
             }
         } catch (error) {
             console.error('Sign-in error:', error);
@@ -88,7 +88,7 @@ const SignInForm = () => {
                                 loading={isSubmitting}
                                 variant="solid"
                                 type="submit"
-                                className="mt-4 bg-gray-600 hover:bg-gray-700"
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
                             >
                                 {isSubmitting ? 'Signing in...' : 'Login'}
                             </Button>

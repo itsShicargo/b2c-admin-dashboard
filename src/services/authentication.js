@@ -5,7 +5,7 @@ import { config } from 'utils/apiEndPoint';
 export async function logIn(payload) {
     try {
         const response = await axios.post(`${config?.authentication?.signIn}`, payload);
-        localStorage.setItem('access-token', response?.data?.access)
+        localStorage.setItem('token', response?.data?.token)
         localStorage.setItem('refresh-token', response?.data?.refresh)
         return response;
 

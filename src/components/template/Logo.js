@@ -9,7 +9,7 @@ const Logo = (props) => {
 
     return (
         <div
-            className={classNames('logo', className, gutter)}
+            className={classNames('logo mt-4', className, gutter)}
             style={{
                 ...style,
                 ...{ width: logoWidth },
@@ -17,7 +17,7 @@ const Logo = (props) => {
         >
             <img
                 className={imgClass} 
-                src="/img/logo/logo-light-mode.svg"
+                src="/img/logo/logo.png"
                 alt={`${APP_NAME} logo`}
             />
         </div>
@@ -27,7 +27,7 @@ const Logo = (props) => {
 Logo.defaultProps = {
     mode: 'light',
     type: 'full',
-    logoWidth: 'auto',
+    logoWidth: '90%',
 }
 
 Logo.propTypes = {

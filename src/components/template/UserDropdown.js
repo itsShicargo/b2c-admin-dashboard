@@ -3,38 +3,16 @@ import { Avatar, Dropdown } from 'components/ui'
 import withHeaderItem from 'utils/hoc/withHeaderItem'
 import useAuth from 'utils/hooks/useAuth'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import { HiOutlineUser, HiOutlineLogout } from 'react-icons/hi'
-// import { FiActivity } from 'react-icons/fi'
-import { MdIndeterminateCheckBox } from "react-icons/md";
-import { VscReferences } from "react-icons/vsc";
-// import Logo from '/img/logo/carg'
+import { HiOutlineLogout } from 'react-icons/hi'
 
 
 const customAvatar = '/img/avatars/thumb-1.jpg';
 
-const dropdownItemList = [
-    {
-        label: 'Profile',
-        path: '/app/account/settings/profile',
-        icon: <HiOutlineUser />,
-    },
-    {
-        label: 'refer & Earn',
-        path: '/app/account/settings/profile',
-        icon: <VscReferences />,
-    },
-    {
-        label: 'term & condition ',
-        path: '/app/account/settings/profile',
-        icon: <MdIndeterminateCheckBox />,
-    },
-    
-]
+
 
 export const UserDropdown = ({ className }) => {
-    const { avatar, userName, authority, email } = useSelector(
+    const {userName, email } = useSelector(
         (state) => state.auth.user
     )
 
@@ -66,25 +44,7 @@ export const UserDropdown = ({ className }) => {
                     </div>
                 </Dropdown.Item>
                 <Dropdown.Item variant="divider" />
-                {dropdownItemList.map((item) => (
-                    <Dropdown.Item
-                        key={item.label}
-                        eventKey={item.label}
-                        className="mb-1 px-0"
-                    >
-                        <Link 
-                            className="flex h-full w-full px-2" 
-                            to={item.path}
-                        >
-                            <span className="flex gap-2 items-center w-full">
-                                <span className="text-xl opacity-50">
-                                    {item.icon}
-                                </span>
-                                <span>{item.label}</span>
-                            </span>
-                        </Link>
-                    </Dropdown.Item>
-                ))}
+                
                 <Dropdown.Item variant="divider" />
                 <Dropdown.Item
                     onClick={signOut}

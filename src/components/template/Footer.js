@@ -16,7 +16,7 @@ const FooterContent = () => {
             <div className="">
                 <Link
                     className="text-gray"
-                    to="https://shipcluescargo.com/termsandcondition.html"
+                    to="https://shipclues.com/terms-and-condition"
                     target="_blank" 
                 >
                     Terms & Conditions
@@ -24,7 +24,7 @@ const FooterContent = () => {
                 <span className="mx-2 text-muted"> | </span>
                 <Link
                     className="text-gray"
-                    to="https://shipcluescargo.com/privacy.html"
+                    to="https://shipclues.com/privacy-policy"
                     target="_blank" 
                 >
                     Privacy & Policy

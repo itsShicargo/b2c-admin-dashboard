@@ -3,7 +3,7 @@ import sortBy from 'utils/sortBy'
 import paginate from 'utils/paginate'
 
 export default function salesFakeApi(server, apiPrefix) {
-    server.post(`${apiPrefix}/sales/dashboard`, (schema) => {
+    server.post(`${apiPrefix}/dashboard`, (schema) => {
         return schema.db.salesDashboardData[0]
     })
 

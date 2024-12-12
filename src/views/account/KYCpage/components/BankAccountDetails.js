@@ -77,7 +77,6 @@ const BankAccountDetails = () => {
             }
     
             const data = await response.json();
-            console.log('Response:', data); // Log API response
         } catch (error) {
             console.error('Error submitting form:', error);
             // Optionally handle error state here

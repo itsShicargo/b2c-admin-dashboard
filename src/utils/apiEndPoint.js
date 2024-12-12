@@ -1,13 +1,12 @@
 // const BASE_URL = process.env.REACT_PUBLIC_BASE_URL;
-const BASE_URL = 'https://api.shipcluescargo.com/'
+const BASE_URL = 'https://shipclues.com/'
 
 export const config = {
     authentication: {
-        signIn: `${BASE_URL}auth/login/`,
+        signIn: `${BASE_URL}api/employee/login`,
         signUp: `${BASE_URL}auth/register/`,
     }, 
-    recharge: {
-        createOrder: `${BASE_URL}/transactions/create/order/shipcargo/`,
-        verifyPayment: `${BASE_URL}/transactions/shipcargo/verify/payment/`,
+    dashboard: {
+        employee: `${BASE_URL}api/employee/dashboard`,
     }
 }

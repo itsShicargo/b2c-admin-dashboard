@@ -89,7 +89,7 @@ const CompanyDetails = () => {
 
             // Make API call using Axios
             const response = await axios.post('https://api.shipcluescargo.com/shipcargo/sellers/sellerkyc/', payload);
-            console.log('API Response:', response.data); // Log the API response if needed
+
 
             toast.success('Warehouse created successfully.');
 

@@ -17,7 +17,7 @@ const metadata = {
         {
             propName: 'authenticatedEntryPath',
             type: `<code>string</code>`,
-            defaultDemo: `<code>'/app/sales/dashboard'</code>`,
+            defaultDemo: `<code>'/app/dashboard'</code>`,
             defaultStarter: `<code>'/home'</code>`,
             desc: 'URL that will redirect after authenticated',
         },

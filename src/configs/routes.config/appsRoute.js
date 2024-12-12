@@ -12,16 +12,8 @@ const appsRoute = [
 
     {
         key: 'appsSales.dashboard',
-        path: `${APP_PREFIX_PATH}/sales/dashboard`,
+        path: `${APP_PREFIX_PATH}/dashboard`,
         component: React.lazy(() => import('views/Shipments/SalesDashboard')),
-        authority: [ADMIN, USER],
-    },
-
-    //  Warehouse
-    {
-        key: 'search records',
-        path: `${APP_PREFIX_PATH}/single-search-record`,
-        component: React.lazy(() => import('views/wallets/index.js')),
         authority: [ADMIN, USER],
     },
 ]

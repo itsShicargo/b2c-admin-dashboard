@@ -4,7 +4,9 @@ const Side = ({ children, content, ...rest }) => {
     return (
         <div className="relative flex flex-col h-screen">
             {/* Top Section */}
-            <div className="bg-blue-900 flex-1"></div>
+            <div className="bg-blue-500 flex-1">
+                {/* <img src='https://qsmart.qa/wp-content/uploads/2020/07/Qsmart-Home-page-low-size.gif' alt='sign' /> */}
+            </div>
 
             {/* Bottom Section */}
             <div className="bg-gray-100 flex-1"></div>

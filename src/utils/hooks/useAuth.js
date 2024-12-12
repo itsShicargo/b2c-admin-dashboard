@@ -18,24 +18,20 @@ function useAuth() {
     const signIn = async (values) => {
         try {
             const resp = await logIn(values)
-            console.log('rrreeeees', resp)
-            const token = resp.data // Access token
-            console.log('ttttoken', token.access)
-            const accessToken = token.access
-            localStorage.setItem('accessToken', accessToken)
+            const token = resp.data // Assuming response has a `data` object containing the token
+            const accessToken = token.token
+            localStorage.setItem('token', accessToken) // Store token in localStorage
+            
             if (token) {
                 dispatch(onSignInSuccess(token))
-
                 const user = resp.data[0][0]
                 if (user) {
                     dispatch(setUser(user))
                 }
-
+    
                 const redirectUrl = query.get(REDIRECT_URL_KEY)
-                navigate(
-                    redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath
-                )
-
+                navigate(redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath)
+    
                 return {
                     status: 'success',
                     message: 'Welcome to shipcargo',
@@ -48,7 +44,7 @@ function useAuth() {
             }
         }
     }
-
+    
     // Signup api calling
     const signUp = async (values) => {
         try {
