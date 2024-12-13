@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { Bar } from 'react-chartjs-2'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -9,13 +9,13 @@ import {
     Title,
     Tooltip,
     Legend,
-} from 'chart.js'
-import 'tailwindcss/tailwind.css'
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+} from 'chart.js';
+import 'tailwindcss/tailwind.css';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 // Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 // Create an Axios instance with default headers
 const axiosInstance = axios.create({
@@ -23,73 +23,82 @@ const axiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-})
+});
 
-const Dashboard = (props) => {
-    const [fromDate, setFromDate] = useState('')
-    const [toDate, setToDate] = useState('')
-    const [dashboardData, setDashboardData] = useState(null)
-    const [loading, setLoading] = useState(false)
+const Dashboard = () => {
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+    const [dashboardData, setDashboardData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    // Manually retrieve token from localStorage
-    const token = localStorage.getItem('token')
+    // Retrieve token from localStorage
+    const token = localStorage.getItem('token');
 
+    // Fetch data when the component first mounts
     useEffect(() => {
         if (!token) {
-            console.warn('Token is not available.')
+            console.warn('Token is not available. Please log in.');
+            return;
         }
-    }, [token])
 
+        // Fetch data automatically when component mounts
+        fetchDashboardData();
+    }, [token]);
+
+    // Fetch dashboard data based on the selected date range
     const fetchDashboardData = async () => {
         if (!token) {
-            console.error('No token found.')
-            alert('Please log in.')
-            return
+            alert('Please log in.');
+            return;
         }
 
-        setLoading(true)
+        setLoading(true);
 
         try {
-            // Send the token in the request body
-            const response = await axiosInstance.post('employee/dashboard', {
-                start_date: fromDate,
-                end_date: toDate,
-                token: token,
-            })
+            // Use default date range if no date is selected
+            const startDate = fromDate || '2024-01-01'; // default start date (can be current date or any default range)
+            const endDate = toDate || new Date().toISOString().split('T')[0]; // default to today's date
 
-            setDashboardData(response.data.data)
+            const response = await axiosInstance.post('employee/dashboard', {
+                start_date: startDate,
+                end_date: endDate,
+                token,
+            });
+
+            setDashboardData(response.data.data);
         } catch (error) {
-            console.error(
-                'Error fetching data:',
-                error.response || error.message
-            )
-            alert('Failed to fetch data. Please try again.')
+            console.error('Error fetching data:', error.response || error.message);
+            alert('Failed to fetch data. Please try again.');
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const handleRefresh = () => {
         if (!fromDate || !toDate) {
-            alert('Please select both start and end dates.')
-            return
+            alert('Please select both start and end dates.');
+            return;
         }
 
-        fetchDashboardData()
-    }
+        fetchDashboardData();
+    };
 
     // Bar chart data and options
     const chartData = {
-        labels: ['Today'],
+        labels: dashboardData?.seller_wise_count
+            ? dashboardData.seller_wise_count.map((item) => `Seller ${item.seller_id}`)
+            : [], 
         datasets: [
             {
-                label: 'Orders',
-                data: dashboardData ? [dashboardData.todays_order] : [0, 0],
-                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                label: 'Shipped Orders',
+                data: dashboardData?.seller_wise_count
+                    ? dashboardData.seller_wise_count.map((item) => item.todays_order)
+                    : [],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)', 
                 borderWidth: 2,
             },
         ],
-    }
+    };
 
     const chartOptions = {
         responsive: true,
@@ -99,9 +108,7 @@ const Dashboard = (props) => {
             },
             tooltip: {
                 callbacks: {
-                    label: (tooltipItem) => {
-                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`
-                    },
+                    label: (tooltipItem) => `${tooltipItem.dataset.label}: ${tooltipItem.raw}`,
                 },
             },
         },
@@ -113,7 +120,7 @@ const Dashboard = (props) => {
                 },
             },
         },
-    }
+    };
 
     return (
         <div className="p-6 min-h-screen animate-fade-in">
@@ -156,7 +163,6 @@ const Dashboard = (props) => {
             </div>
 
             {/* Counter Boxes */}
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 {[
                     {
@@ -196,12 +202,12 @@ const Dashboard = (props) => {
             {/* Bar Chart Section */}
             <div className="bg-white p-6 rounded-md shadow-md animate-slide-in">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-bold">Seller Orders</h2>
+                    <h2 className="text-lg font-bold">Orders Overview</h2>
                 </div>
                 <Bar data={chartData} options={chartOptions} />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Dashboard
+export default Dashboard;

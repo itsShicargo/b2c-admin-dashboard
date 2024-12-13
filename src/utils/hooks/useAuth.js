@@ -18,9 +18,9 @@ function useAuth() {
     const signIn = async (values) => {
         try {
             const resp = await logIn(values)
-            const token = resp.data // Assuming response has a `data` object containing the token
+            const token = resp.data 
             const accessToken = token.token
-            localStorage.setItem('token', accessToken) // Store token in localStorage
+            localStorage.setItem('token', accessToken) 
             
             if (token) {
                 dispatch(onSignInSuccess(token))
